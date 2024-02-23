@@ -1,46 +1,53 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addBook } from './BooksSlice';
+import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 function AddBook() {
 
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
 
-  const numberOfBooks = useSelector((state) => state.booksReducer.books.length);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    const book = { id = numberOfBooks + 1 ,title, author};
+    const book = { id: uuidv4() ,title, author};
+    
+    dispatch(addBook(book));
+    navigate("/show-books", {replace: true} );
   }
 
   return (
-    <>
+    <div>
     
-    <h2 style:  >Add Book</h2> 
+    <h2 >Add Book</h2> 
 
     <form onSubmit={handleSubmit}>
     <div className='form-field'>
-      <label htmlFor='title'>Title: </label> <br></br>
+      <label htmlFor='title'>Title: </label> 
       <input type='text' id='title' name='title' value={title} onChange={(e) => setTitle(e.target.value)} ></input>
       
       </div>
-    </form>
+    
     <br></br>
     
-    <form>
+   
     <div className='form-field'>
-      <label htmlFor='author'>Author: </label> <br></br>
+      <label htmlFor='author'>Author: </label> 
       <input type='text' id='author' name='author' value={author} onChange={(e) => setAuthor(e.target.value)} ></input>
      
       </div>
-      <br></br>
       <button type='submit'>Add Book</button>
+      
+      </form>
 
-    </form>
 
 
-
-    </>
+    </div>
   )
 }
 
